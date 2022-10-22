@@ -7,11 +7,15 @@ import "./App.css";
 function App() {
   const [pins, setPins] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
+  const handleMarkerClick = (id) => {
+    setCurrentPlaceId(id);
+    // setViewport({ ...viewport, latitude: lat, longitude: long });
+  };
   useEffect(() => {
     const getPins = async () => {
       try {
-        const allPins = await axios.get("/pin");
-        setPins(allPins.data);
+        const res = await axios.get("/api/pin/");
+        setPins(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -43,35 +47,39 @@ function App() {
               <i
                 class="fa-solid fa-location-pin"
                 style={{ fontSize: "35px ", color: "brown" }}
+                onClick={() => handleMarkerClick(p._id)}
               ></i>
             </Marker>
-            <Popup
-              longitude={p.lat}
-              latitude={p.long}
-              closeButton={true}
-              closeOnClick={false}
-              anchor="right"
-            >
-              <div className="card">
-                <label>{p.title}</label>
-                <h4>x</h4>
-                <label>Review</label>
-                <p>{p.desc}</p>
-                <label>Rating</label>
-                <div>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
+            {p._id === currentPlaceId && (
+              <Popup
+                longitude={p.lat}
+                latitude={p.long}
+                closeButton={true}
+                closeOnClick={false}
+                anchor="right"
+                onClose={() => setCurrentPlaceId(null)}
+              >
+                <div className="card">
+                  <label>{p.title}</label>
+                  <h4>x</h4>
+                  <label>Review</label>
+                  <p>{p.desc}</p>
+                  <label>Rating</label>
+                  <div>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                  </div>
+                  <label>Information</label>
+                  <span className="username">
+                    Create by <b>{p.username}</b>
+                  </span>
+                  <span className="date">{format(p.createdAt)}</span>
                 </div>
-                <label>Information</label>
-                <span className="username">
-                  Create by <b>{p.username}</b>
-                </span>
-                <span className="date">{format(p.createdAt)}</span>
-              </div>
-            </Popup>
+              </Popup>
+            )}
           </>;
         })}
       </Map>
