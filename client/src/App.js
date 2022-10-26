@@ -3,16 +3,38 @@ import { useState, useEffect } from "react";
 import Map, { Marker, Popup } from "react-map-gl";
 import axios from "axios";
 import { format } from "timeago.js";
+import Register from "./components/Register";
+import Login from "./components/Login";
 import "./App.css";
 function App() {
-  const currentUser = "jane";
+  const [currentUser, setCurrentUser] = useState(null);
   const [pins, setPins] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [newPlace, setNewPlace] = useState(null);
-
+  const [title, setTitle] = useState(null);
+  const [desc, setDesc] = useState(null);
   const handleMarkerClick = (id) => {
     setCurrentPlaceId(id);
-    // setViewport({ ...viewport, latitude: lat, longitude: long });
+  };
+  const [showRegister, setShowRegister] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(e);
+    const newPin = {
+      username: currentUser,
+      title,
+      desc,
+      lat: newPlace.lat,
+      lng: newPlace.lng,
+    };
+    try {
+      const res = await axios.post("/api/pin/", newPin);
+      setPins([...pins, res.data]);
+      setNewPlace(null);
+    } catch (err) {
+      console.log(err);
+    }
   };
   const handleDblClick = (e) => {
     console.log(e);
@@ -22,6 +44,7 @@ function App() {
       lng,
     });
   };
+  const handleLogout = () => {};
   useEffect(() => {
     const getPins = async () => {
       try {
@@ -62,7 +85,7 @@ function App() {
                     color: p.username === currentUser ? "blue" : "brown",
                     cursor: "pointer",
                   }}
-                  onClick={() => handleMarkerClick(p._id)}
+                  onClick={() => handleMarkerClick(p._id, p.lat, p.long)}
                 ></i>
               </Marker>
               {p._id === currentPlaceId && (
@@ -81,11 +104,7 @@ function App() {
                     <p>{p.desc}</p>
                     <label>Rating</label>
                     <div>
-                      <i class="fa-solid fa-star"></i>
-                      <i class="fa-solid fa-star"></i>
-                      <i class="fa-solid fa-star"></i>
-                      <i class="fa-solid fa-star"></i>
-                      <i class="fa-solid fa-star"></i>
+                      {Array(p.rating).fill(<i class="fa-solid fa-star"></i>)}
                     </div>
                     <label>Information</label>
                     <span className="username">
@@ -107,8 +126,61 @@ function App() {
             anchor="right"
             onClose={() => setNewPlace(null)}
           >
-            Hello
+            <div>
+              <form onSubmit={handleSubmit}>
+                <label>Title</label>
+                <input
+                  placeholder="Enter a title"
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                  }}
+                ></input>
+                <label>Review</label>
+                <textarea
+                  placeholder="Give Reviews"
+                  onChange={(e) => {
+                    setDesc(e.target.value);
+                  }}
+                ></textarea>
+                <label>Rating</label>
+                <select>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+                <button type="submit" className="submitButton">
+                  Add Pin
+                </button>
+              </form>
+            </div>
           </Popup>
+        )}
+        {currentUser ? (
+          <button className="button logout" onClick={handleLogout}>
+            Log out
+          </button>
+        ) : (
+          <div className="buttons">
+            <button className="button login" onClick={() => setShowLogin(true)}>
+              Log in
+            </button>
+            <button
+              className="button register"
+              onClick={() => setShowRegister(true)}
+            >
+              Register
+            </button>
+          </div>
+        )}
+        {showRegister && <Register setShowRegister={setShowRegister} />}
+        {showLogin && (
+          <Login
+            setShowLogin={setShowLogin}
+            setCurrentUser={setCurrentUser}
+            // myStorage={myStorage}
+          />
         )}
       </Map>
     </div>
