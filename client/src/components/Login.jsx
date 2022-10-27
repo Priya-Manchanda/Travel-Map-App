@@ -2,7 +2,7 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import "./Login.css";
 
-export default function Login({ setShowLogin, setCurrentUsername,myStorage }) {
+export default function Login({ setShowLogin, setCurrentUsername, myStorage }) {
   const [error, setError] = useState(false);
   const usernameRef = useRef();
   const passwordRef = useRef();
@@ -16,8 +16,8 @@ export default function Login({ setShowLogin, setCurrentUsername,myStorage }) {
     try {
       const res = await axios.post("/api/user/login", user);
       setCurrentUsername(res.data.username);
-      myStorage.setItem('user', res.data.username);
-      setShowLogin(false)
+      myStorage.setItem("user", res.data.username);
+      setShowLogin(false);
     } catch (err) {
       setError(true);
     }
@@ -26,8 +26,7 @@ export default function Login({ setShowLogin, setCurrentUsername,myStorage }) {
   return (
     <div className="loginContainer">
       <div className="logo">
-        {/* <Room className="logoIcon" /> */}
-        <span>LamaPin</span>
+        <span>TravelPin</span>
       </div>
       <form onSubmit={handleSubmit}>
         <input autoFocus placeholder="username" ref={usernameRef} />
@@ -42,7 +41,12 @@ export default function Login({ setShowLogin, setCurrentUsername,myStorage }) {
         </button>
         {error && <span className="failure">Something went wrong!</span>}
       </form>
-      {/* <Cancel className="loginCancel" onClick={() => setShowLogin(false)} /> */}
+      <i
+        className="fa-sharp fa-solid fa-octagon-xmark"
+        onClick={() => {
+          setShowLogin(false);
+        }}
+      ></i>
     </div>
   );
 }

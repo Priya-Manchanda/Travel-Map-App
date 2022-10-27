@@ -7,7 +7,8 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import "./App.css";
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
+  const myStorage = window.localStorage;
+  const [currentUser, setCurrentUser] = useState(myStorage.getItem("user"));
   const [pins, setPins] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [newPlace, setNewPlace] = useState(null);
@@ -44,7 +45,10 @@ function App() {
       lng,
     });
   };
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    myStorage.removeItem("user");
+    setCurrentUser(null);
+  };
   useEffect(() => {
     const getPins = async () => {
       try {
@@ -104,7 +108,9 @@ function App() {
                     <p>{p.desc}</p>
                     <label>Rating</label>
                     <div>
-                      {Array(p.rating).fill(<i class="fa-solid fa-star"></i>)}
+                      {Array(p.rating).fill(
+                        <i className="fa-solid fa-star"></i>
+                      )}
                     </div>
                     <label>Information</label>
                     <span className="username">
@@ -179,7 +185,7 @@ function App() {
           <Login
             setShowLogin={setShowLogin}
             setCurrentUser={setCurrentUser}
-            // myStorage={myStorage}
+            myStorage={myStorage}
           />
         )}
       </Map>

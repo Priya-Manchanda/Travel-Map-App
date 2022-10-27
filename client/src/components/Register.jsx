@@ -28,8 +28,7 @@ export default function Register({ setShowRegister }) {
   return (
     <div className="registerContainer">
       <div className="logo">
-        {/* <Room className="logoIcon" /> */}
-        <span>LamaPin</span>
+        <span>TravelPin</span>
       </div>
       <form onSubmit={handleSubmit}>
         <input autoFocus placeholder="username" ref={usernameRef} />
@@ -48,10 +47,12 @@ export default function Register({ setShowRegister }) {
         )}
         {error && <span className="failure">Something went wrong!</span>}
       </form>
-      {/* <Cancel
-        className="registerCancel"
-        onClick={() => setShowRegister(false)}
-      /> */}
+      <i
+        className="fa-sharp fa-solid fa-octagon-xmark"
+        onClick={() => {
+          setShowRegister(false);
+        }}
+      ></i>
     </div>
   );
 }
