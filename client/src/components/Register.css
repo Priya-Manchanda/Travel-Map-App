@@ -50,10 +50,9 @@
   color: red;
   text-align: center;
 }
-.fa-sharp {
+.mapbox-popup-close-button {
   position: absolute;
   top: 5px;
-  color: black;
-  background-color: black;
+  right:10px;
   cursor: pointer;
 }

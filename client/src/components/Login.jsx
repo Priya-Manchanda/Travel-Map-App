@@ -9,14 +9,15 @@ export default function Login({ setShowLogin, setCurrentUsername, myStorage }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = {
+    const users = {
       username: usernameRef.current.value,
       password: passwordRef.current.value,
     };
     try {
-      const res = await axios.post("/api/user/login", user);
+      const res = await axios.post("/api/user/login", users);
+      myStorage.setItem("users", res.data.username);
       setCurrentUsername(res.data.username);
-      myStorage.setItem("user", res.data.username);
+      // close it and assign a new user
       setShowLogin(false);
     } catch (err) {
       setError(true);
@@ -30,23 +31,23 @@ export default function Login({ setShowLogin, setCurrentUsername, myStorage }) {
       </div>
       <form onSubmit={handleSubmit}>
         <input autoFocus placeholder="username" ref={usernameRef} />
-        <input
-          type="password"
-          min="6"
-          placeholder="password"
-          ref={passwordRef}
-        />
+        <input type="password" placeholder="password" ref={passwordRef} />
         <button className="loginBtn" type="submit">
           Login
         </button>
         {error && <span className="failure">Something went wrong!</span>}
       </form>
-      <i
-        className="fa-sharp fa-solid fa-octagon-xmark"
+      <button
+        className="mapbox-popup-close-button"
+        type="button"
+        aria-label="Close-Popup"
+        area-hidden="true"
         onClick={() => {
           setShowLogin(false);
         }}
-      ></i>
+      >
+        ✘
+      </button>
     </div>
   );
 }

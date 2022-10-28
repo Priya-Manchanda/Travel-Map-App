@@ -47,12 +47,18 @@ export default function Register({ setShowRegister }) {
         )}
         {error && <span className="failure">Something went wrong!</span>}
       </form>
-      <i
-        className="fa-sharp fa-solid fa-octagon-xmark"
+      <button
+        className="mapbox-popup-close-button"
+        type="button"
+        aria-label="Close-Popup"
+        area-hidden="true"
         onClick={() => {
           setShowRegister(false);
         }}
-      ></i>
+      >
+        ✘
+      </button>
     </div>
   );
 }
+//  you can pin your location and share your reviews with other users.

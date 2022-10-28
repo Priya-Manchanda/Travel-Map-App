@@ -8,11 +8,12 @@ import Login from "./components/Login";
 import "./App.css";
 function App() {
   const myStorage = window.localStorage;
-  const [currentUser, setCurrentUser] = useState(myStorage.getItem("user"));
+  const [currentUser, setCurrentUser] = useState(myStorage.getItem("users"));
   const [pins, setPins] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [newPlace, setNewPlace] = useState(null);
   const [title, setTitle] = useState(null);
+  const [star, setStar] = useState(0);
   const [desc, setDesc] = useState(null);
   const handleMarkerClick = (id) => {
     setCurrentPlaceId(id);
@@ -26,8 +27,9 @@ function App() {
       username: currentUser,
       title,
       desc,
+      rating: star,
       lat: newPlace.lat,
-      lng: newPlace.lng,
+      lng: newPlace.long,
     };
     try {
       const res = await axios.post("/api/pin/", newPin);
@@ -46,7 +48,7 @@ function App() {
     });
   };
   const handleLogout = () => {
-    myStorage.removeItem("user");
+    myStorage.removeItem("users");
     setCurrentUser(null);
   };
   useEffect(() => {
@@ -149,7 +151,7 @@ function App() {
                   }}
                 ></textarea>
                 <label>Rating</label>
-                <select>
+                <select onChange={(e) => setStar(e.target.value)}>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
