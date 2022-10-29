@@ -71,7 +71,7 @@ function App() {
           zoom: 4,
         }}
         style={{ width: "100vw", height: "100vh" }}
-        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapStyle="mapbox://styles/mapbox/dark-v10"
         mapboxAccessToken="pk.eyJ1IjoieWFzaDU1NSIsImEiOiJjbDdsdW1mam0wOGkzM3dwOWE5MHdtdTA5In0.hdnvnbP9qJ84-aPa9xcrWw"
         onDblClick={handleDblClick}
       >
@@ -88,7 +88,7 @@ function App() {
                   class="fa-solid fa-location-pin"
                   style={{
                     fontSize: "35px ",
-                    color: p.username === currentUser ? "blue" : "brown",
+                    color: p.username === currentUser ? "teal" : "white",
                     cursor: "pointer",
                   }}
                   onClick={() => handleMarkerClick(p._id, p.lat, p.long)}
