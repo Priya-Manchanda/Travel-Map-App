@@ -22,7 +22,6 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(e);
     console.log(newPlace);
     const newPin = {
       username: currentUser,
@@ -41,7 +40,6 @@ function App() {
     }
   };
   const handleDblClick = (e) => {
-    // console.log(e);
     const { lat, lng } = e.lngLat;
     setNewPlace({
       lat,
