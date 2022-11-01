@@ -13,7 +13,7 @@ function App() {
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [newPlace, setNewPlace] = useState(null);
   const [title, setTitle] = useState(null);
-  const [star, setStar] = useState(0);
+  const [star, setStar] = useState(1);
   const [desc, setDesc] = useState(null);
   const handleMarkerClick = (id) => {
     setCurrentPlaceId(id);
@@ -22,14 +22,15 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(e);
+    // console.log(e);
+    console.log(newPlace);
     const newPin = {
       username: currentUser,
       title,
       desc,
       rating: star,
       lat: newPlace.lat,
-      lng: newPlace.long,
+      lng: newPlace.lng,
     };
     try {
       const res = await axios.post("/api/pin/", newPin);
@@ -40,7 +41,7 @@ function App() {
     }
   };
   const handleDblClick = (e) => {
-    console.log(e);
+    // console.log(e);
     const { lat, lng } = e.lngLat;
     setNewPlace({
       lat,
@@ -55,6 +56,7 @@ function App() {
     const getPins = async () => {
       try {
         const res = await axios.get("/api/pin/");
+        console.log(res.data);
         setPins(res.data);
       } catch (err) {
         console.log(err);
@@ -75,12 +77,13 @@ function App() {
         mapboxAccessToken="pk.eyJ1IjoieWFzaDU1NSIsImEiOiJjbDdsdW1mam0wOGkzM3dwOWE5MHdtdTA5In0.hdnvnbP9qJ84-aPa9xcrWw"
         onDblClick={handleDblClick}
       >
-        {pins.map((p) => {
+
+        { pins.length>0 && pins.map((p) => {
           return (
             <>
               <Marker
                 position="absolute"
-                longitude={p.long}
+                longitude={p.long || p.lng}
                 latitude={p.lat}
                 anchor="center"
               >
@@ -186,7 +189,7 @@ function App() {
         {showLogin && (
           <Login
             setShowLogin={setShowLogin}
-            setCurrentUser={setCurrentUser}
+            setCurrentUsername={setCurrentUser}
             myStorage={myStorage}
           />
         )}
